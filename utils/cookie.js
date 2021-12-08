@@ -31,3 +31,7 @@ export function readCookie(name) {
 
   return null;
 }
+
+export function clearCookie(name) {
+  setCookie(name, '', -1);
+}

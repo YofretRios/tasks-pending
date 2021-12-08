@@ -1,8 +1,9 @@
+import { useRouter } from 'next/router';
 import { http, getAuthorizationHeader } from '../http/index.js';
-import { setCookie } from '../utils/cookie';
-import { useUser } from '../hooks/useUser';
+import { setCookie, readCookie, clearCookie } from '../utils/cookie';
+import { useUserMutations } from '../hooks/useUserMutations';
 
-export async function me(token) {
+export async function getProfile(token) {
   try {
     const { data } = await http('/users/me', {
       method: 'get',
@@ -17,7 +18,8 @@ export async function me(token) {
 }
 
 export function useAuth() {
-  const { updateUser } = useUser();
+  const { updateUser, clearUser } = useUserMutations();
+  const router = useRouter();
 
   async function signin(email, password) {
     try {
@@ -38,5 +40,24 @@ export function useAuth() {
     }
   }
 
-  return { signin, me };
+  async function signout() {
+    try {
+      const token = readCookie('TM_SESSION');
+
+      await http('/users/logout', { 
+        method: 'post',
+        headers: getAuthorizationHeader(token),
+      });
+
+      clearCookie('TM_SESSION');
+      clearCookie('USER');
+
+      clearUser(null);
+      router.replace('/');
+    } catch (ex) {
+      console.log(ex.message);
+    }
+  }
+
+  return { signin, signout };
 }

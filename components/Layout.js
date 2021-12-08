@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+// import Header from './Header';
 // Prevent Header from rendering on the server to avoid missmatch HTML
 const Header = dynamic(() => import('./Header'), { ssr: false });
 

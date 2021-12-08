@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '../modules/auth';
 import { useUser } from '../hooks/useUser';
 
 const tailwindLogo = ({ src }) => {
@@ -7,9 +8,12 @@ const tailwindLogo = ({ src }) => {
 };
 
 export default function Header() {
+  const { signout } = useAuth();
   const { user: userData } = useUser();
 
-  console.log(userData, 'userData from header bro');
+  const onClick = () => {
+    signout();
+  };
 
   return (
     <nav className="bg-gray-800">
@@ -94,6 +98,21 @@ export default function Header() {
               </div>
             </div>
           </div>
+
+          {userData && (
+            <div className="ml-auto">
+              <span className="text-white px-3 py-2 rounded-md text-sm font-medium">
+                {userData.name}
+              </span>
+              <button
+                type="button"
+                onClick={onClick}
+                className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Log Out
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

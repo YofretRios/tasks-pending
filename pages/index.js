@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import LoginForm from '../components/LoginForm';
 import Profile from '../components/Profile';
-import { me } from '../modules/auth';
+import { getProfile } from '../modules/auth';
 import { useUser } from '../hooks/useUser';
 
 /**
@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
   let user = null;
 
   if (token) {
-    user = await me(req.cookies.TM_SESSION);
+    user = await getProfile(req.cookies.TM_SESSION);
   }
 
   return { props: { user } };
