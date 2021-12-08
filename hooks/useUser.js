@@ -1,19 +1,35 @@
-// import { me } from "../modules/auth";
-// import { setKey } from "../utils/appStorage";
-import { useQueryClient } from "react-query";
+import { useQueryClient, useQuery } from 'react-query';
+import { readCookie } from '../utils/cookie';
+import { me } from '../modules/auth';
 
-export function useUser() {
+export function useUser(user) {
+  let initialUser = null;
   const queryClient = useQueryClient();
-  // const user = getKey("user");
 
-  // const { data } = useQuery("user", me, {
-  //   initialData: user,
-  //   onSucces: (received) => {
-  //     if (!received) {
-  //       clearKey('user');
-  //     }
-  //   },
-  // });
+  // Grab the user from argument
+  // if not available, grab the user from client store
+  if (user) {
+    initialUser = user;
+  } else {
+    const storedUser = readCookie('USER');
+
+    initialUser = storedUser && JSON.parse(storedUser);
+  }
+
+  const { data } = useQuery(
+    'user',
+    async () => {
+      let token = readCookie('TM_SESSION');
+
+      return await me(token);
+    },
+    {
+      initialData: initialUser,
+      onSuccess: (recieved) => {
+        // console.log(recieved);
+      },
+    }
+  );
 
   function updateUser(user) {
     queryClient.setQueryData('user', user);
@@ -23,5 +39,5 @@ export function useUser() {
     queryClient.setQueryData('user', null);
   }
 
-  return { updateUser, clearUser };
+  return { user: data, updateUser, clearUser };
 }

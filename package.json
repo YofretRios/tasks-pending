@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format:all": "npx prettier --write './**/*.{js,jsx,css,scss}'",
+    "format": "npx prettier --write"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",

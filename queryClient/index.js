@@ -1,6 +1,11 @@
 import { QueryClient } from 'react-query';
 
-// TODO: Default options
-// const defaultOptions = {};
+const defaultOptions = {
+  queries: {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  },
+};
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({ defaultOptions });
