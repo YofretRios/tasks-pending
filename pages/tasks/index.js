@@ -85,7 +85,7 @@ export default function Tasks() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <Link href="/tasks/1">
-                          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                          <a className="text-indigo-600 hover:text-indigo-900">
                             Details
                           </a>
                         </Link>
