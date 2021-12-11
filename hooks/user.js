@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { readCookie } from '../utils/cookie';
 import { me } from '../modules/auth';
 
@@ -27,4 +27,18 @@ export function useUser(user) {
   );
 
   return { user: data };
+}
+
+export function useUserMutations() {
+  const queryClient = useQueryClient();
+
+  function updateUser(user) {
+    queryClient.setQueryData('user', user);
+  }
+
+  function clearUser() {
+    queryClient.setQueryData('user', null);
+  }
+
+  return { updateUser, clearUser };
 }

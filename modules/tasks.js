@@ -30,3 +30,25 @@ export async function fetchTask(id) {
     return { error: 'Can not retrieve taks' };
   }
 }
+
+export async function createTask(taskData) {
+  try {
+    const token = readCookie('TM_SESSION');
+    // const { data } = await http('/tasks', {
+    //   body: taskData,
+    //   method: 'post',
+    //   headers: getAuthorizationHeader(token),
+    // });
+
+    return http(
+      '/tasks',
+      {
+        data: taskData,
+        method: 'post',
+        headers: getAuthorizationHeader(token),
+      }
+    );
+  } catch (ex) {
+    return { error: 'Can not create task' };
+  }
+}

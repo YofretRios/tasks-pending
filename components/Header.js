@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '../modules/auth';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../hooks/user';
 
 const tailwindLogo = ({ src }) => {
   return `https://tailwindui.com/img/logos${src}`;

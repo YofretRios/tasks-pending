@@ -4,14 +4,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import clsx from 'clsx';
 import CreateTaskModal from '../../components/CreateTaskModal';
-import { useTasks } from '../../hooks/useTask.js';
+import { useTasks } from '../../hooks/task.js';
 
 export default function Tasks() {
   const [open, setOpen] = useState(false);
 
-  const { data, isFetching } = useTasks();
+  const { data, isLoading } = useTasks();
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>

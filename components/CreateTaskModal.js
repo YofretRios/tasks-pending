@@ -1,14 +1,21 @@
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { useCreateTask } from '../hooks/task';
 
 export default function CreateTaskModal({ open, setOpen }) {
   const cancelButtonRef = useRef(null);
+  const createTask = useCreateTask();
 
   const saveTask = (event) => {
     event.preventDefault();
-
     const description = event.target.elements.desc.value;
-    console.log(description);
+
+    if (!description) {
+      return;
+    }
+
+    createTask({ description });
+    setOpen(false);
   };
 
   return (

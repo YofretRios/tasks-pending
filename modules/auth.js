@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { http, getAuthorizationHeader } from '../http/index.js';
 import { setCookie, readCookie, clearCookie } from '../utils/cookie';
-import { useUserMutations } from '../hooks/useUserMutations';
+import { useUserMutations } from '../hooks/user';
 
 export async function getProfile(token) {
   try {

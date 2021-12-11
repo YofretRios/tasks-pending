@@ -2,7 +2,7 @@ import Head from 'next/head';
 import LoginForm from '../components/LoginForm';
 import Profile from '../components/Profile';
 import { getProfile } from '../modules/auth';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../hooks/user';
 
 /**
  * Grab TM_SSESION from server side and request profile, this will load right away if available
