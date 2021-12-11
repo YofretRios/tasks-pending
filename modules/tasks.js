@@ -5,7 +5,7 @@ export async function fetchTasks(limit = 10, skip = 0) {
   try {
     const token = readCookie('TM_SESSION');
 
-    const { data } = await http(`/tasks?limit=${limit}&skip=${skip}`, {
+    const { data } = await http(`/tasks?limit=${limit}&skip=${skip}&sortBy=createdAt:desc`, {
       method: 'get',
       headers: getAuthorizationHeader(token),
     });
@@ -34,11 +34,6 @@ export async function fetchTask(id) {
 export async function createTask(taskData) {
   try {
     const token = readCookie('TM_SESSION');
-    // const { data } = await http('/tasks', {
-    //   body: taskData,
-    //   method: 'post',
-    //   headers: getAuthorizationHeader(token),
-    // });
 
     return http(
       '/tasks',

@@ -65,6 +65,7 @@ export default function Tasks() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {data.map((task) => {
+                    const mutatingClass = clsx(task.mutating && 'opacity-50');
                     const stateClass = clsx(
                       'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
                       {
@@ -74,7 +75,7 @@ export default function Tasks() {
                     );
 
                     return (
-                      <tr key={task._id}>
+                      <tr key={task._id} className={mutatingClass}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="ml-4">
