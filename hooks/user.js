@@ -14,7 +14,7 @@ export function useUser(user) {
     initialUser = storedUser && JSON.parse(storedUser);
   }
 
-  const { data } = useQuery(
+  const { data, error } = useQuery(
     'user',
     async () => {
       let token = readCookie('TM_SESSION');
@@ -26,7 +26,7 @@ export function useUser(user) {
     }
   );
 
-  return { user: data };
+  return { user: data, error };
 }
 
 export function useUserMutations() {
