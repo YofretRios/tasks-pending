@@ -1,6 +1,9 @@
+import { useState } from 'react';
+import clsx from 'clsx';
 import { useAuth } from '../modules/auth';
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
   const { signin } = useAuth();
 
   const onSubmit = async (event) => {
@@ -9,8 +12,17 @@ export default function LoginForm() {
     const email = event.target.elements.email.value;
     const password = event.target.elements.password.value;
 
+    setLoading(true);
+
     await signin(email, password);
   };
+
+  const btnClass = clsx(
+    'py-2 px-4 w-full border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500',
+    {
+      'opacity-50 cursor-not-allowed': loading,
+    }
+  );
 
   return (
     <form className="max-w-lg m-auto" onSubmit={onSubmit}>
@@ -37,10 +49,7 @@ export default function LoginForm() {
       />
 
       <div className="text-center py-4">
-        <button
-          type="submit"
-          className="py-2 px-4 w-full border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
+        <button type="submit" className={btnClass}>
           Log In
         </button>
       </div>

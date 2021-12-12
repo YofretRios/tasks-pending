@@ -31,7 +31,7 @@ export default function Tasks() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CreateTaskModal open={open} setOpen={setOpen} />
+      <CreateTaskModal open={open} setOpen={setOpen} currentPage={page} />
 
       <div className="py-2">
         <button
@@ -120,6 +120,9 @@ export default function Tasks() {
         </div>
 
         <div className="bg-white py-3 flex items-center">
+          <p className="text-sm text-gray-700">
+            Showing page <span className="font-medium">{page}</span>
+          </p>
           <div className="flex-1 flex justify-end">
             <button
               type="button"

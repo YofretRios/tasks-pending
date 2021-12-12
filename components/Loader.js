@@ -5,8 +5,6 @@ import { useIsFetching } from 'react-query';
 export default function Loader() {
   const isFetching = useIsFetching();
 
-  console.log(isFetching);
-
   const spinnerClass = clsx('lds-ripple', {
     'hidden': !isFetching
   })

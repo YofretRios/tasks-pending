@@ -2,9 +2,9 @@ import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useCreateTask } from '../hooks/task';
 
-export default function CreateTaskModal({ open, setOpen }) {
+export default function CreateTaskModal({ open, setOpen, currentPage }) {
   const cancelButtonRef = useRef(null);
-  const createTask = useCreateTask();
+  const createTask = useCreateTask(currentPage);
 
   const saveTask = (event) => {
     event.preventDefault();

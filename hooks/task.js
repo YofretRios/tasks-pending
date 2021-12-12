@@ -35,7 +35,7 @@ export function useTask(id) {
     isLoading,
     isFetching,
     error,
-  } = useQuery(['tasks', id], async ({ signal }) => await fetchTask(id, signal));
+  } = useQuery(['task', id], async ({ signal }) => await fetchTask(id, signal));
 
   function cancel() {
     queryClient.cancelQueries(['tasks', id]);
@@ -48,7 +48,7 @@ export function useTask(id) {
   return { data, isLoading, isFetching, error, cancel, refresh };
 }
 
-export function useCreateTask() {
+export function useCreateTask(page) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation((data) => createTask(data), {
@@ -70,24 +70,24 @@ export function useCreateTask() {
       };
 
       // Generate and optimistic version of the current tasks array
-      const previousData = queryClient.getQueryData('tasks');
+      const previousData = queryClient.getQueryData(['tasks', page]);
       const newTasks = [task, ...previousData];
       newTasks.pop();
 
-      // Update our current cash with our optimistic rendered version
-      queryClient.setQueryData('tasks', newTasks);
+      // Update our current cache with our optimistic rendered version
+      queryClient.setQueryData(['tasks', page], newTasks);
 
       return { previousData };
     },
     onError: (error, newData, context) => {
       if (context.previousData) {
-        queryClient.invalidateQueries(['tasks'], context.previousData);
+        queryClient.invalidateQueries(['tasks', page], context.previousData);
 
         toast.error('Unable to create task');
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['tasks']);
+      queryClient.invalidateQueries(['tasks', page]);
     },
   });
 
@@ -103,13 +103,13 @@ export function useUpdateTask() {
     },
     onMutate: (newData) => {
       // Optimistic Rendering
-      const previousData = queryClient.getQueryData(['tasks', newData.id]);
+      const previousData = queryClient.getQueryData(['task', newData.id]);
       const tempTask = {
         ...previousData,
         ...newData,
       };
 
-      queryClient.setQueryData(['tasks', newData.id], tempTask);
+      queryClient.setQueryData(['task', newData.id], tempTask);
 
       return { previousData };
     },
@@ -118,12 +118,12 @@ export function useUpdateTask() {
       if (context.previousData) {
         const { _id } = context.previousData;
 
-        queryClient.setQueryData(['tasks', _id], context.previousData);
+        queryClient.setQueryData(['task', _id], context.previousData);
       }
     },
     onSettled: () => {
       // Tell react-query to invalidate the main list
-      queryClient.invalidateQueries(['tasks'], { exact: true });
+      queryClient.invalidateQueries(['tasks']);
     },
   });
 
