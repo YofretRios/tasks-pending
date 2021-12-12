@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { RefreshIcon } from '@heroicons/react/solid';
 import Head from 'next/head';
 import Switch from '../../components/Switch';
 import NotFound from '../../components/NotFound';
@@ -8,8 +10,12 @@ export function getServerSideProps({ params }) {
 }
 
 export default function Task({ id }) {
-  const { data, isLoading, error } = useTask(id);
+  const { data, isLoading, error, cancel, refresh } = useTask(id);
   const updateTask = useUpdateTask();
+
+  useEffect(() => {
+    return cancel;
+  }, []); // eslint-disable-line
 
   const updateState = (value) => {
     updateTask({ id, completed: value });
@@ -31,7 +37,7 @@ export default function Task({ id }) {
   }
 
   if (error) {
-    return <NotFound />;
+    return <NotFound title={error.message} />;
   }
 
   return (
@@ -41,6 +47,18 @@ export default function Task({ id }) {
         <meta name="description" content="Simple Task manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <div className="py-2">
+        <button
+          type="button"
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          onClick={refresh}
+        >
+          <RefreshIcon className="h-5 w-5 mr-2" />
+          Re-fresh
+        </button>
+      </div>
+
       <div className="bg-white shadow overflow-hidden sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <h3 className="text-lg leading-6 font-medium text-gray-900">Task Info</h3>

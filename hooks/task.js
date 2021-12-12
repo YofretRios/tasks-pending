@@ -27,7 +27,11 @@ export function useTask(id) {
     queryClient.cancelQueries(['tasks', id]);
   }
 
-  return { data, isLoading, isFetching, error, cancel };
+  function refresh() {
+    queryClient.refetchQueries(['tasks', id]);
+  }
+
+  return { data, isLoading, isFetching, error, cancel, refresh };
 }
 
 export function useCreateTask() {
