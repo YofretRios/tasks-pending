@@ -23,11 +23,11 @@ export default function Task({ id }) {
       return;
     }
 
-    updateTask({ id, description});
+    updateTask({ id, description });
   };
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (error) {

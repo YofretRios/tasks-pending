@@ -42,7 +42,7 @@ export function useAuth() {
     try {
       const token = readCookie('TM_SESSION');
 
-      await http('/users/logout', { 
+      await http('/users/logout', {
         method: 'post',
         headers: getAuthorizationHeader(token),
       });
