@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Switch from '../../components/Switch';
+import NotFound from '../../components/NotFound';
 import { useTask, useUpdateTask } from '../../hooks/task';
 
 export function getServerSideProps({ params }) {
@@ -7,7 +8,7 @@ export function getServerSideProps({ params }) {
 }
 
 export default function Task({ id }) {
-  const { data, isLoading } = useTask(id);
+  const { data, isLoading, error } = useTask(id);
   const updateTask = useUpdateTask();
 
   const updateState = (value) => {
@@ -25,7 +26,13 @@ export default function Task({ id }) {
     updateTask({ id, description});
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <NotFound />;
+  }
 
   return (
     <>

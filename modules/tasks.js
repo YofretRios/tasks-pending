@@ -20,7 +20,7 @@ export async function fetchTask(id, signal) {
   try {
     const token = readCookie('TM_SESSION');
 
-    const { data } = await http(`/tasks/${id}3`, {
+    const { data } = await http(`/tasks/${id}`, {
       method: 'get',
       headers: getAuthorizationHeader(token),
       signal, // making a query cancellable
