@@ -38,11 +38,11 @@ export function useTask(id) {
   } = useQuery(['task', id], async ({ signal }) => await fetchTask(id, signal));
 
   function cancel() {
-    queryClient.cancelQueries(['tasks', id]);
+    queryClient.cancelQueries(['task', id]);
   }
 
   function refresh() {
-    queryClient.refetchQueries(['tasks', id]);
+    queryClient.refetchQueries(['task', id]);
   }
 
   return { data, isLoading, isFetching, error, cancel, refresh };
