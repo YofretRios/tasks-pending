@@ -12,8 +12,7 @@ export async function getProfile(token) {
 
     return data;
   } catch (ex) {
-    console.log(ex.message);
-    return null;
+    throw new Error('Unable to fetch online profile');
   }
 }
 
@@ -35,8 +34,7 @@ export function useAuth() {
 
       return data;
     } catch (ex) {
-      console.log(ex.message);
-      return null;
+      throw new Error('Unable to sign in');
     }
   }
 
@@ -55,7 +53,7 @@ export function useAuth() {
       clearUser(null);
       router.replace('/');
     } catch (ex) {
-      console.log(ex.message);
+      throw new Error('Unable to sign out');
     }
   }
 

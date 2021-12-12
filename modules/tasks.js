@@ -12,7 +12,7 @@ export async function fetchTasks(limit = 10, skip = 0) {
 
     return data;
   } catch (ex) {
-    return { error: 'Can not retrieve taks' };
+    throw new Error('Unable to retreive your tasks list');
   }
 }
 
@@ -42,7 +42,7 @@ export async function createTask(taskData) {
       headers: getAuthorizationHeader(token),
     });
   } catch (ex) {
-    return { error: 'Can not create task' };
+    throw new Error('Unable to create task');
   }
 }
 
@@ -56,6 +56,6 @@ export async function updateTask({ id, ...rest }) {
       headers: getAuthorizationHeader(token),
     });
   } catch (ex) {
-    return { error: 'Can not create task' };
+    throw new Error('Unable to update task');
   }
 }
