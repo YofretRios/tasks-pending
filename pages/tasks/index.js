@@ -8,15 +8,21 @@ import NotFound from '../../components/NotFound';
 import { useTasks } from '../../hooks/task.js';
 
 export default function Tasks() {
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
 
-  const { data, isLoading, error } = useTasks();
+  const { data, isLoading, error } = useTasks(page);
 
   if (isLoading) return <div>Loading...</div>;
 
   if (error) {
     return <NotFound title={error.message} />;
   }
+
+  const nextClass = clsx(
+    'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50',
+    { 'opacity-50 cursor-not-allowed': page <= 1 }
+  );
 
   return (
     <>
@@ -115,18 +121,24 @@ export default function Tasks() {
 
         <div className="bg-white py-3 flex items-center">
           <div className="flex-1 flex justify-end">
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            <button
+              type="button"
+              disabled={page <= 1}
+              onClick={() => {
+                setPage((previousPage) => previousPage - 1);
+              }}
+              className={nextClass}
             >
               Previous
-            </a>
-            <a
-              href="#"
+            </button>
+            <button
+              onClick={() => {
+                setPage((previousPage) => previousPage + 1);
+              }}
               className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
               Next
-            </a>
+            </button>
           </div>
         </div>
       </div>

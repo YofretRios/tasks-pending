@@ -1,13 +1,27 @@
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { fetchTasks, fetchTask, createTask, updateTask } from '../modules/tasks';
 
-export function useTasks() {
+export function useTasks(page) {
+  const queryClient = useQueryClient();
+  // calculate paginated data
+  const limit = 10;
+  const skip = page * limit;
+
+  // Prefetch next page for extra smooth experience
+  useEffect(() => {
+    const nextPage = page + 1;
+    const newSkip = nextPage * limit;
+    queryClient.prefetchQuery(['tasks', nextPage], async () => await fetchTasks(limit, newSkip));
+  }, [queryClient, page]);
+
   const { data, isLoading, isFetching, error } = useQuery(
-    ['tasks'],
-    async () => await fetchTasks(),
+    ['tasks', page],
+    async () => await fetchTasks(limit, skip),
     {
       refetchOnMount: true, // Will refetch on mount if the data is stale
+      keepPreviousData: true, // Allow to keep cache data on screen while the next page comes in
     }
   );
 
