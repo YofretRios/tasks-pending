@@ -1,22 +1,31 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import clsx from 'clsx';
-import { useTask } from '../../hooks/useTask.js';
+import Switch from '../../components/Switch';
+import { useTask, useUpdateTask } from '../../hooks/task';
 
-export function getServerSideProps() {
-  return { props: {} };
+export function getServerSideProps({ params }) {
+  return { props: { id: params.id } };
 }
 
-export default function Task() {
-  const router = useRouter();
-  const { data, isFetching } = useTask(router.query.id);
+export default function Task({ id }) {
+  const { data, isLoading } = useTask(id);
+  const updateTask = useUpdateTask();
 
-  if (isFetching) return <div>Loading...</div>;
+  const updateState = (value) => {
+    updateTask({ id, completed: value });
+  };
 
-  const stateClass = clsx('px-2 inline-flex text-xs leading-5 font-semibold rounded-full', {
-    'bg-green-100 bg-green-100': data.completed,
-    'bg-yellow-100 bg-yellow-100': !data.completed,
-  });
+  const updateDescription = (event) => {
+    event.preventDefault();
+    const description = event.target.elements.desc.value;
+
+    if (!description) {
+      return;
+    }
+
+    updateTask({ id, description});
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
@@ -38,13 +47,21 @@ export default function Task() {
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Description</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {data.description}
+                <form onSubmit={updateDescription}>
+                  <input
+                    type="text"
+                    name="desc"
+                    id="desc"
+                    defaultValue={data.description}
+                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </form>
               </dd>
             </div>
             <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Completed</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                <span className={stateClass}>{data.completed ? 'Completed' : 'Pending'}</span>
+                <Switch onToggle={updateState} status={data.completed} />
               </dd>
             </div>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

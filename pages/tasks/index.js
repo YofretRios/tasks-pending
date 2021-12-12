@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { PlusIcon } from '@heroicons/react/solid';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -9,7 +9,12 @@ import { useTasks } from '../../hooks/task.js';
 export default function Tasks() {
   const [open, setOpen] = useState(false);
 
-  const { data, isLoading } = useTasks();
+  const { data, isLoading, cancel } = useTasks();
+
+  useEffect(() => {
+    // cancel query on component unmount
+    return cancel;
+  }, [cancel]);
 
   if (isLoading) return <div>Loading...</div>;
 

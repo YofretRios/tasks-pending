@@ -16,13 +16,14 @@ export async function fetchTasks(limit = 10, skip = 0) {
   }
 }
 
-export async function fetchTask(id) {
+export async function fetchTask(id, signal) {
   try {
     const token = readCookie('TM_SESSION');
 
     const { data } = await http(`/tasks/${id}`, {
       method: 'get',
       headers: getAuthorizationHeader(token),
+      signal, // making a query cancellable
     });
 
     return data;
@@ -35,14 +36,25 @@ export async function createTask(taskData) {
   try {
     const token = readCookie('TM_SESSION');
 
-    return http(
-      '/tasks',
-      {
-        data: taskData,
-        method: 'post',
-        headers: getAuthorizationHeader(token),
-      }
-    );
+    return http('/tasks', {
+      data: taskData,
+      method: 'post',
+      headers: getAuthorizationHeader(token),
+    });
+  } catch (ex) {
+    return { error: 'Can not create task' };
+  }
+}
+
+export async function updateTask({ id, ...rest }) {
+  try {
+    const token = readCookie('TM_SESSION');
+
+    return http(`/tasks/${id}`, {
+      data: rest,
+      method: 'patch',
+      headers: getAuthorizationHeader(token),
+    });
   } catch (ex) {
     return { error: 'Can not create task' };
   }
