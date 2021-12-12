@@ -1,22 +1,22 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment } from 'react';
 import { PlusIcon } from '@heroicons/react/solid';
 import Head from 'next/head';
 import Link from 'next/link';
 import clsx from 'clsx';
 import CreateTaskModal from '../../components/CreateTaskModal';
+import NotFound from '../../components/NotFound';
 import { useTasks } from '../../hooks/task.js';
 
 export default function Tasks() {
   const [open, setOpen] = useState(false);
 
-  const { data, isLoading, cancel } = useTasks();
-
-  useEffect(() => {
-    // cancel query on component unmount
-    return cancel;
-  }, [cancel]);
+  const { data, isLoading, error } = useTasks();
 
   if (isLoading) return <div>Loading...</div>;
+
+  if (error) {
+    return <NotFound title={error.message} />;
+  }
 
   return (
     <>
@@ -33,7 +33,7 @@ export default function Tasks() {
           className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           onClick={() => setOpen(true)}
         >
-          <PlusIcon className="h-5 w-5" />
+          <PlusIcon className="h-5 w-5 mr-2" />
           Add Task
         </button>
       </div>
