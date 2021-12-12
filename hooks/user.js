@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from 'react-query';
 import { readCookie } from '../utils/cookie';
-import { me } from '../modules/auth';
+import { getProfile } from '../modules/auth';
 
 export function useUser(user) {
   let initialUser = null;
@@ -19,7 +19,7 @@ export function useUser(user) {
     async () => {
       let token = readCookie('TM_SESSION');
 
-      return await me(token);
+      return await getProfile(token);
     },
     {
       initialData: initialUser,
