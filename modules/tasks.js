@@ -20,7 +20,7 @@ export async function fetchTask(id, signal) {
   try {
     const token = readCookie('TM_SESSION');
 
-    const { data } = await http(`/tasks/${id}`, {
+    const { data } = await http(`/tasks/${id}3`, {
       method: 'get',
       headers: getAuthorizationHeader(token),
       signal, // making a query cancellable
@@ -28,7 +28,7 @@ export async function fetchTask(id, signal) {
 
     return data;
   } catch (ex) {
-    return { error: 'Can not retrieve taks' };
+    throw new Error('Unable to retreive specific task');
   }
 }
 

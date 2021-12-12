@@ -11,13 +11,18 @@ export function useTasks() {
 
 export function useTask(id) {
   const queryClient = useQueryClient();
-  const { data, isLoading, isFetching } = useQuery(['tasks', id], async ({ signal }) => await fetchTask(id, signal));
+  const {
+    data = {},
+    isLoading,
+    isFetching,
+    error,
+  } = useQuery(['tasks', id], async ({ signal }) => await fetchTask(id, signal));
 
   function cancel() {
     queryClient.cancelQueries(['tasks', id]);
   }
 
-  return { data, isLoading, isFetching, cancel };
+  return { data, isLoading, isFetching, error, cancel };
 }
 
 export function useCreateTask() {
