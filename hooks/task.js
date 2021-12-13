@@ -6,6 +6,7 @@ import { fetchTasks, fetchTask, createTask, updateTask } from '../modules/tasks'
 export function useTasks(page) {
   const queryClient = useQueryClient();
   // calculate paginated data
+  page -= 1;
   const limit = 10;
   const skip = page * limit;
 
@@ -48,7 +49,7 @@ export function useTask(id) {
   return { data, isLoading, isFetching, error, cancel, refresh };
 }
 
-export function useCreateTask(page) {
+export function useCreateTask() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation((data) => createTask(data), {
@@ -70,24 +71,24 @@ export function useCreateTask(page) {
       };
 
       // Generate and optimistic version of the current tasks array
-      const previousData = queryClient.getQueryData(['tasks', page]);
+      const previousData = queryClient.getQueryData(['tasks', 0]);
       const newTasks = [task, ...previousData];
       newTasks.pop();
 
       // Update our current cache with our optimistic rendered version
-      queryClient.setQueryData(['tasks', page], newTasks);
+      queryClient.setQueryData(['tasks', 0], newTasks);
 
       return { previousData };
     },
     onError: (error, newData, context) => {
       if (context.previousData) {
-        queryClient.invalidateQueries(['tasks', page], context.previousData);
+        queryClient.setQueryData(['tasks', 0], context.previousData);
 
         toast.error('Unable to create task');
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['tasks', page]);
+      queryClient.invalidateQueries(['tasks']);
     },
   });
 

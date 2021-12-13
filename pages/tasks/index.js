@@ -31,7 +31,7 @@ export default function Tasks() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CreateTaskModal open={open} setOpen={setOpen} currentPage={page} />
+      <CreateTaskModal open={open} setOpen={setOpen} />
 
       <div className="py-2">
         <button
